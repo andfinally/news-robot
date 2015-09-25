@@ -23,6 +23,15 @@
   "homepage": "https://github.com/andfinally/twitter-service#readme",
   "devDependencies": {
     "bower": "^1.5.3",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.0.2",
+    "gulp-sass": "^2.0.4",
+    "http-server": "^0.8.4",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.1.4"
+  },
+  "dependencies": {
+    "bower": "^1.5.3",
     "http-server": "^0.8.4"
   }
 }
