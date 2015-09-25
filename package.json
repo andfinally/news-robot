@@ -1,0 +1,28 @@
+{
+  "name": "twitter-service",
+  "version": "1.0.0",
+  "description": "UI for Hoque's Twitter Service API, which is uses Bayes Classifier to filter out tweets which might be good for Metro news.",
+  "main": "index.html",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "http-server -a localhost -p 8000 -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andfinally/twitter-service.git"
+  },
+  "keywords": [
+    "Twitter",
+    "API"
+  ],
+  "author": "And Finally",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andfinally/twitter-service/issues"
+  },
+  "homepage": "https://github.com/andfinally/twitter-service#readme",
+  "devDependencies": {
+    "bower": "^1.5.3",
+    "http-server": "^0.8.4"
+  }
+}
