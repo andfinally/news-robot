@@ -10,14 +10,14 @@ var riseError = function (err) {
 
 // Compile scss files to css
 gulp.task('sass', function () {
-    return gulp.src('scss/**/*.scss')
+    return gulp.src('app/scss/**/*.scss')
         .pipe(sass({
             outputStyle: 'expanded',
             precision: 8
         }))
         .pipe(autoprefixer('> 1%'))
         .on('error', riseError)
-        .pipe(gulp.dest('css'))
+        .pipe(gulp.dest('app/css'))
 });
 
 gulp.task('css', function () {
