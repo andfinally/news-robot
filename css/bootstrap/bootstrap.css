@@ -6252,7 +6252,3 @@ a.bg-danger:hover {
     display: none !important;
   }
 }
-
-.date {
-  white-space: nowrap;
-}

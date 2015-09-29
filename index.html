@@ -1,12 +1,37 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" ng-app="twitterServiceApp">
 <head>
-	<meta charset="UTF-8">
-	<link href="css/style.css" rel="stylesheet" type="text/css">
-	<title>Twitter Service</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Firehose</title>
+
+	<link href="css/style.css" rel="stylesheet">
+
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular/angular-route.min.js"></script>
+	<script src="bower_components/angular/angular-resource.min.js"></script>
+	<script src="js/app.js"></script>
+
 </head>
 <body>
-<h1>Hello world</h1>
-<script src="js/bootstrap/bootstrap.js"></script>
+
+<div ng-controller="TweetListCtrl" class="container">
+
+	<div class="page-header">
+		<h1>Firehose</h1>
+		<p class="lead">Our pick of the best stories from Twitter</p>
+	</div>
+
+	<div class="tweets view-frame">
+		<div ng-repeat="tweet in tweets" class="row">
+			<div class="col-xs-12 col-md-10"><a href="{{tweet.url}}" target="_blank">{{tweet.title}}</a></div>
+			<div class="col-xs-12 col-md-2 text-muted small date">{{tweet.timestamp | date:'d MMM HH:mm'}}</div>
+		</div>
+	</div>
+
+</div>
+
 </body>
 </html>
