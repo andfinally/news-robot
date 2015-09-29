@@ -6253,6 +6253,20 @@ a.bg-danger:hover {
   }
 }
 
+.tweets .row {
+  padding: 0.5rem 0;
+}
+
+.tweets .row:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
 .date {
   white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .date {
+    text-align: right;
+  }
 }

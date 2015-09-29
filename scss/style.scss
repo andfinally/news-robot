@@ -1,11 +1,23 @@
 @import 'bootstrap/bootstrap';
 
+.tweets {
+  .row {
+    padding: 0.5rem 0;
+    &:nth-child(even) {
+      background-color: #f9f9f9;
+
+    }
+  }
+}
+
 .date {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 @media (min-width: 768px) {
-
+  .date {
+    text-align: right;
+  }
 }
 
 @media (min-width: 992px) {
