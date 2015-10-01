@@ -1,7 +1,7 @@
 {
   "name": "twitter-service",
   "version": "1.0.0",
-  "description": "UI for Hoque's Twitter Service API, which is uses Bayes Classifier to filter out tweets which might be good for Metro news.",
+  "description": "UI for Twitter Service API, which is uses Bayes Classifier to filter out tweets which might be good for news.",
   "main": "index.html",
   "scripts": {
     "prestart": "npm install",
@@ -24,15 +24,8 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
-    "gulp-jasmine": "^2.1.0",
     "gulp-sass": "^2.0.4",
     "http-server": "^0.8.4",
-    "jasmine-core": "^2.3.4",
-    "karma": "^0.13.10",
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-spec-reporter": "0.0.20",
-    "phantomjs": "^1.9.18",
     "require-dir": "^0.3.0",
     "run-sequence": "^1.1.4"
   },

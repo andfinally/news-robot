@@ -1,0 +1,11 @@
+<div class="page-header">
+	<h1>Firehose</h1>
+	<p class="lead">Our pick of the best stories from Twitter</p>
+</div>
+
+<div class="tweets view-frame">
+	<div ng-repeat="tweet in tweets" class="row">
+		<div class="col-xs-12 col-md-10"><a href="{{tweet.url}}" target="_blank">{{tweet.title}}</a></div>
+		<div class="col-xs-12 col-md-2 text-muted small date">{{tweet.timestamp | date:'d MMM HH:mm'}}</div>
+	</div>
+</div>

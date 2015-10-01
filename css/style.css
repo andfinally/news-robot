@@ -6265,6 +6265,12 @@ a.bg-danger:hover {
   white-space: nowrap;
 }
 
+#dial-container {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+}
+
 @media (min-width: 768px) {
   .date {
     text-align: right;

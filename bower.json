@@ -1,0 +1,32 @@
+{
+  "name": "twitter-service",
+  "version": "1.0.0",
+  "homepage": "https://github.com/andfinally/twitter-service",
+  "authors": [
+    "And Finally <andfinally@users.noreply.github.com>"
+  ],
+  "description": "UI for Twitter Service API, which is uses Bayes Classifier to filter out tweets which might be good for news.",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "Twitter",
+    "API"
+  ],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-mocks": "~1.4.6",
+    "angular-route": "~1.4.6",
+    "angular": "~1.4.6",
+    "angular-resource": "~1.4.6",
+    "jquery": "~2.1.4",
+    "aterrien/jQuery-Knob": "jquery-knob#~1.2.11"
+  }
+}
