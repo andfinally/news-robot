@@ -14,10 +14,27 @@ app.config(['$routeProvider',
 	}
 ]);
 
-app.controller('TweetListCtrl', ['$scope', '$http', function ($scope, $http) {
+// Controller refreshes list every 10 seconds
+
+app.controller('TweetListCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	var url = 'http://testapi.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
-	$http.jsonp(url).
-		success(function (data, status) {
-			$scope.tweets = data;
-		});
+
+	$scope.getData = function () {
+		$http.jsonp(url).
+			success(function (data, status) {
+				$scope.tweets = data;
+			});
+	};
+
+	// Function to replicate setInterval using $timeout service.
+	$scope.interval = function () {
+		$timeout(function () {
+			$scope.getData();
+			$scope.interval();
+		}, 10000)
+	};
+
+	// Get initial data and kick off the interval
+	$scope.getData();
+	$scope.interval();
 }]);
