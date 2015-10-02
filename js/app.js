@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // http://testapi.metro.co.uk/twitter/articles.json?callback=ajaxfun
 
@@ -10,7 +10,7 @@ app.config(['$routeProvider',
 			when('/', {
 				templateUrl: 'partials/tweet-list.html',
 				controller : 'TweetListCtrl'
-			})
+			});
 	}
 ]);
 

@@ -26,10 +26,15 @@
     "gulp-autoprefixer": "^3.0.2",
     "gulp-sass": "^2.0.4",
     "http-server": "^0.8.4",
+    "karma": "^0.13.10",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18",
     "require-dir": "^0.3.0",
     "run-sequence": "^1.1.4"
   },
   "dependencies": {
-    "bower": "^1.5.3"
+    "bower": "^1.5.3",
+    "express": "^4.13.3"
   }
 }
