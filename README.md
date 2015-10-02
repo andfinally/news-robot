@@ -8,3 +8,5 @@
 # Compiling SCSS with Gulp
 
 • `gulp watch`
+
+![Screenshot](screenshot.png)
