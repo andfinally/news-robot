@@ -9,4 +9,4 @@
 
 • `gulp watch`
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.png?raw=true)
