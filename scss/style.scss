@@ -33,8 +33,9 @@
 body.dark {
 	background: #060606;
 	color: #888;
-	a {
-		color: #2a9fd6;
+	a,
+	a:hover {
+		color: linen;
 	}
 	.tweets .row:nth-child(even) {
 		background: #333333;

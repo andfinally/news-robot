@@ -6282,8 +6282,9 @@ body.dark {
   color: #888;
 }
 
-body.dark a {
-  color: #2a9fd6;
+body.dark a,
+body.dark a:hover {
+  color: linen;
 }
 
 body.dark .tweets .row:nth-child(even) {
