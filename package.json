@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "UI for Twitter Service API, which is uses Bayes Classifier to filter out tweets which might be good for news.",
   "main": "index.html",
-  "scripts": {
-    "prestart": "npm install",
-    "start": "http-server -a localhost -p 8080 -c-1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andfinally/twitter-service.git"

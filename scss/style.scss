@@ -1,17 +1,17 @@
 @import 'bootstrap/bootstrap';
 
 .tweets {
-  .row {
-    padding: 0.5rem 0;
-    &:nth-child(even) {
-      background-color: #f9f9f9;
+	.row {
+		padding: 0.5rem 0;
+		&:nth-child(even) {
+			background-color: #f9f9f9;
 
-    }
-  }
+		}
+	}
 }
 
 .date {
-  white-space: nowrap;
+	white-space: nowrap;
 }
 
 #dial-container {
@@ -21,11 +21,25 @@
 }
 
 @media (min-width: 768px) {
-  .date {
-    text-align: right;
-  }
+	.date {
+		text-align: right;
+	}
 }
 
 @media (min-width: 992px) {
 
+}
+
+body.dark {
+	background: #060606;
+	color: #888;
+	a {
+		color: #2a9fd6;
+	}
+	.tweets .row:nth-child(even) {
+		background: #333333;
+	}
+	.text-muted {
+		color: #999;
+	}
 }

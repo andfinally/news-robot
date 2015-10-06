@@ -6276,3 +6276,20 @@ a.bg-danger:hover {
     text-align: right;
   }
 }
+
+body.dark {
+  background: #060606;
+  color: #888;
+}
+
+body.dark a {
+  color: #2a9fd6;
+}
+
+body.dark .tweets .row:nth-child(even) {
+  background: #333333;
+}
+
+body.dark .text-muted {
+  color: #999;
+}

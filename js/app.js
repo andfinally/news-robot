@@ -2,7 +2,7 @@
 
 // http://testapi.metro.co.uk/twitter/articles.json?callback=ajaxfun
 
-var app = angular.module('twitterServiceApp', ['ngRoute']);
+var app = angular.module('twitterServiceApp', ['ngRoute', 'LocalStorageModule']);
 
 app.config(['$routeProvider',
 	function ($routeProvider) {
@@ -10,13 +10,19 @@ app.config(['$routeProvider',
 			when('/', {
 				templateUrl: 'partials/tweet-list.html',
 				controller : 'TweetListCtrl'
-			});
+			})
 	}
 ]);
 
+app.run(function ($rootScope, localStorageService) {
+	if (localStorageService.get('dark') === true) {
+		$rootScope.dark = true;
+	}
+});
+
 // Controller refreshes list every 10 seconds
 
-app.controller('TweetListCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('TweetListCtrl', ['$scope', '$rootScope', '$http', '$timeout', 'localStorageService', function ($scope, $rootScope, $http, $timeout, localStorageService) {
 	var url = 'http://testapi.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
 
 	$scope.getData = function () {
@@ -33,6 +39,15 @@ app.controller('TweetListCtrl', ['$scope', '$http', '$timeout', function ($scope
 			$scope.interval();
 		}, 10000)
 	};
+
+	$scope.toggleDark = function() {
+		$rootScope.dark = !$rootScope.dark;
+		if ($rootScope.dark) {
+			localStorageService.set('dark', true);
+		} else {
+			localStorageService.remove('dark');
+		}
+	}
 
 	// Get initial data and kick off the interval
 	$scope.getData();

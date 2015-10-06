@@ -1,8 +1,12 @@
-<div class="page-header"></div>
+<div class="page-header clearfix"></div>
 
 <div class="tweets view-frame">
 	<div ng-repeat="tweet in tweets" class="row">
 		<div class="col-xs-12 col-md-10"><a href="{{::tweet.url}}" target="_blank">{{::tweet.title}}</a></div>
 		<div class="col-xs-12 col-md-2 text-muted small date">{{::tweet.timestamp | date:'d MMM HH:mm'}}</div>
 	</div>
+</div>
+
+<div class="btn-group btn-group-sm pull-right m-t" role="group" aria-label="Basic example">
+	<button type="button" ng-class="$root.dark ? 'active btn btn-secondary' : 'btn btn-secondary'" ng-click="toggleDark()">Dark</button>
 </div>
