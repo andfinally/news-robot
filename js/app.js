@@ -2,7 +2,7 @@
 
 // http://testapi.metro.co.uk/twitter/articles.json?callback=ajaxfun
 
-var app = angular.module('twitterServiceApp', ['ngRoute', 'LocalStorageModule']);
+var app = angular.module('twitterServiceApp', ['ngRoute', 'LocalStorageModule', 'angularMoment']);
 
 app.config(['$routeProvider',
 	function ($routeProvider) {
@@ -22,8 +22,8 @@ app.run(function ($rootScope, localStorageService) {
 
 // Controller refreshes list every 10 seconds
 
-app.controller('TweetListCtrl', ['$scope', '$rootScope', '$http', '$timeout', 'localStorageService', function ($scope, $rootScope, $http, $timeout, localStorageService) {
-	var url = 'http://testapi.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
+app.controller('TweetListCtrl', ['$scope', '$rootScope', '$http', '$timeout', 'localStorageService', 'amMoment', function ($scope, $rootScope, $http, $timeout, localStorageService, amMoment) {
+	var url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
 
 	$scope.getData = function () {
 		$http.jsonp(url).
