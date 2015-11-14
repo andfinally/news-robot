@@ -1,294 +1,165 @@
-import Util from './util'
-
-
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0): dropdown.js
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.5
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
-
-const Dropdown = (($) => {
+ * ======================================================================== */
 
 
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
++function ($) {
+  'use strict';
 
-  const NAME                = 'dropdown'
-  const VERSION             = '4.0.0'
-  const DATA_KEY            = 'bs.dropdown'
-  const EVENT_KEY           = `.${DATA_KEY}`
-  const DATA_API_KEY        = '.data-api'
-  const JQUERY_NO_CONFLICT  = $.fn[NAME]
+  // DROPDOWN CLASS DEFINITION
+  // =========================
 
-  const Event = {
-    HIDE             : `hide${EVENT_KEY}`,
-    HIDDEN           : `hidden${EVENT_KEY}`,
-    SHOW             : `show${EVENT_KEY}`,
-    SHOWN            : `shown${EVENT_KEY}`,
-    CLICK            : `click${EVENT_KEY}`,
-    CLICK_DATA_API   : `click${EVENT_KEY}${DATA_API_KEY}`,
-    KEYDOWN_DATA_API : `keydown${EVENT_KEY}${DATA_API_KEY}`
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
   }
 
-  const ClassName = {
-    BACKDROP : 'dropdown-backdrop',
-    DISABLED : 'disabled',
-    OPEN     : 'open'
-  }
+  Dropdown.VERSION = '3.3.5'
 
-  const Selector = {
-    BACKDROP      : '.dropdown-backdrop',
-    DATA_TOGGLE   : '[data-toggle="dropdown"]',
-    FORM_CHILD    : '.dropdown form',
-    ROLE_MENU     : '[role="menu"]',
-    ROLE_LISTBOX  : '[role="listbox"]',
-    NAVBAR_NAV    : '.navbar-nav',
-    VISIBLE_ITEMS : '[role="menu"] li:not(.disabled) a, '
-                  + '[role="listbox"] li:not(.disabled) a'
-  }
+  function getParent($this) {
+    var selector = $this.attr('data-target')
 
-
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Dropdown {
-
-    constructor(element) {
-      this._element = element
-
-      this._addEventListeners()
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
+    var $parent = selector && $(selector)
 
-    // getters
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
 
-    static get VERSION() {
-      return VERSION
-    }
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
 
+      if (!$parent.hasClass('open')) return
 
-    // public
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
 
-    toggle() {
-      if (this.disabled || $(this).hasClass(ClassName.DISABLED)) {
-        return false
-      }
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
 
-      let parent   = Dropdown._getParentFromElement(this)
-      let isActive = $(parent).hasClass(ClassName.OPEN)
+      if (e.isDefaultPrevented()) return
 
-      Dropdown._clearMenus()
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget)
+    })
+  }
 
-      if (isActive) {
-        return false
-      }
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
 
-      if ('ontouchstart' in document.documentElement &&
-         (!$(parent).closest(Selector.NAVBAR_NAV).length)) {
+    if ($this.is('.disabled, :disabled')) return
 
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
         // if mobile we use a backdrop because click events don't delegate
-        let dropdown       = document.createElement('div')
-        dropdown.className = ClassName.BACKDROP
-        $(dropdown).insertBefore(this)
-        $(dropdown).on('click', Dropdown._clearMenus)
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
       }
 
-      let relatedTarget = { relatedTarget : this }
-      let showEvent     = $.Event(Event.SHOW, relatedTarget)
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
 
-      $(parent).trigger(showEvent)
+      if (e.isDefaultPrevented()) return
 
-      if (showEvent.isDefaultPrevented()) {
-        return false
-      }
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
 
-      this.focus()
-      this.setAttribute('aria-expanded', 'true')
-
-      $(parent).toggleClass(ClassName.OPEN)
-      $(parent).trigger($.Event(Event.SHOWN, relatedTarget))
-
-      return false
+      $parent
+        .toggleClass('open')
+        .trigger('shown.bs.dropdown', relatedTarget)
     }
 
-    dispose() {
-      $.removeData(this._element, DATA_KEY)
-      $(this._element).off(EVENT_KEY)
-      this._element = null
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
     }
 
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
 
-    // private
+    if (!$items.length) return
 
-    _addEventListeners() {
-      $(this._element).on(Event.CLICK, this.toggle)
-    }
+    var index = $items.index(e.target)
 
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
 
-    // static
-
-    static _jQueryInterface(config) {
-      return this.each(function () {
-        let data  = $(this).data(DATA_KEY)
-
-        if (!data) {
-          $(this).data(DATA_KEY, (data = new Dropdown(this)))
-        }
-
-        if (typeof config === 'string') {
-          data[config].call(this)
-        }
-      })
-    }
-
-    static _clearMenus(event) {
-      if (event && event.which === 3) {
-        return
-      }
-
-      let backdrop = $(Selector.BACKDROP)[0]
-      if (backdrop) {
-        backdrop.parentNode.removeChild(backdrop)
-      }
-
-      let toggles = $.makeArray($(Selector.DATA_TOGGLE))
-
-      for (let i = 0; i < toggles.length; i++) {
-        let parent        = Dropdown._getParentFromElement(toggles[i])
-        let relatedTarget = { relatedTarget : toggles[i] }
-
-        if (!$(parent).hasClass(ClassName.OPEN)) {
-          continue
-        }
-
-        if (event && event.type === 'click' &&
-           (/input|textarea/i.test(event.target.tagName)) &&
-           ($.contains(parent, event.target))) {
-          continue
-        }
-
-        let hideEvent = $.Event(Event.HIDE, relatedTarget)
-        $(parent).trigger(hideEvent)
-        if (hideEvent.isDefaultPrevented()) {
-          continue
-        }
-
-        toggles[i].setAttribute('aria-expanded', 'false')
-
-        $(parent)
-          .removeClass(ClassName.OPEN)
-          .trigger($.Event(Event.HIDDEN, relatedTarget))
-      }
-    }
-
-    static _getParentFromElement(element) {
-      let parent
-      let selector = Util.getSelectorFromElement(element)
-
-      if (selector) {
-        parent = $(selector)[0]
-      }
-
-      return parent || element.parentNode
-    }
-
-    static _dataApiKeydownHandler(event) {
-      if (!/(38|40|27|32)/.test(event.which) ||
-         /input|textarea/i.test(event.target.tagName)) {
-        return
-      }
-
-      event.preventDefault()
-      event.stopPropagation()
-
-      if (this.disabled || $(this).hasClass(ClassName.DISABLED)) {
-        return
-      }
-
-      let parent   = Dropdown._getParentFromElement(this)
-      let isActive = $(parent).hasClass(ClassName.OPEN)
-
-      if ((!isActive && event.which !== 27) ||
-           (isActive && event.which === 27)) {
-
-        if (event.which === 27) {
-          let toggle = $(parent).find(Selector.DATA_TOGGLE)[0]
-          $(toggle).trigger('focus')
-        }
-
-        $(this).trigger('click')
-        return
-      }
-
-      let items = $.makeArray($(Selector.VISIBLE_ITEMS))
-
-      items = items.filter((item) => {
-        return item.offsetWidth || item.offsetHeight
-      })
-
-      if (!items.length) {
-        return
-      }
-
-      let index = items.indexOf(event.target)
-
-      if (event.which === 38 && index > 0) { // up
-        index--
-      }
-
-      if (event.which === 40 && index < items.length - 1) { // down
-        index++
-      }
-
-      if (!~index) {
-        index = 0
-      }
-
-      items[index].focus()
-    }
-
+    $items.eq(index).trigger('focus')
   }
 
 
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
 
   $(document)
-    .on(Event.KEYDOWN_DATA_API, Selector.DATA_TOGGLE,  Dropdown._dataApiKeydownHandler)
-    .on(Event.KEYDOWN_DATA_API, Selector.ROLE_MENU,    Dropdown._dataApiKeydownHandler)
-    .on(Event.KEYDOWN_DATA_API, Selector.ROLE_LISTBOX, Dropdown._dataApiKeydownHandler)
-    .on(Event.CLICK_DATA_API, Dropdown._clearMenus)
-    .on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, Dropdown.prototype.toggle)
-    .on(Event.CLICK_DATA_API, Selector.FORM_CHILD, (e) => {
-      e.stopPropagation()
-    })
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
 
-
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   */
-
-  $.fn[NAME]             = Dropdown._jQueryInterface
-  $.fn[NAME].Constructor = Dropdown
-  $.fn[NAME].noConflict  = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT
-    return Dropdown._jQueryInterface
-  }
-
-  return Dropdown
-
-})(jQuery)
-
-export default Dropdown
+}(jQuery);

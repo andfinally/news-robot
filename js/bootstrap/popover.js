@@ -1,191 +1,108 @@
-import Tooltip from './tooltip'
-
-
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0): popover.js
+/* ========================================================================
+ * Bootstrap: popover.js v3.3.5
+ * http://getbootstrap.com/javascript/#popovers
+ * ========================================================================
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
-
-const Popover = (($) => {
+ * ======================================================================== */
 
 
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
++function ($) {
+  'use strict';
 
-  const NAME                = 'popover'
-  const VERSION             = '4.0.0'
-  const DATA_KEY            = 'bs.popover'
-  const EVENT_KEY           = `.${DATA_KEY}`
-  const JQUERY_NO_CONFLICT  = $.fn[NAME]
+  // POPOVER PUBLIC CLASS DEFINITION
+  // ===============================
 
-  const Default = $.extend({}, Tooltip.Default, {
-    placement : 'right',
-    trigger   : 'click',
-    content   : '',
-    template  : '<div class="popover" role="tooltip">'
-              + '<div class="popover-arrow"></div>'
-              + '<h3 class="popover-title"></h3>'
-              + '<div class="popover-content"></div></div>'
+  var Popover = function (element, options) {
+    this.init('popover', element, options)
+  }
+
+  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
+
+  Popover.VERSION  = '3.3.5'
+
+  Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
+    placement: 'right',
+    trigger: 'click',
+    content: '',
+    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
   })
 
-  const DefaultType = $.extend({}, Tooltip.DefaultType, {
-    content : '(string|function)'
-  })
 
-  const ClassName = {
-    FADE : 'fade',
-    IN  : 'in'
+  // NOTE: POPOVER EXTENDS tooltip.js
+  // ================================
+
+  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
+
+  Popover.prototype.constructor = Popover
+
+  Popover.prototype.getDefaults = function () {
+    return Popover.DEFAULTS
   }
 
-  const Selector = {
-    TITLE   : '.popover-title',
-    CONTENT : '.popover-content',
-    ARROW   : '.popover-arrow'
+  Popover.prototype.setContent = function () {
+    var $tip    = this.tip()
+    var title   = this.getTitle()
+    var content = this.getContent()
+
+    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
+    $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
+      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
+    ](content)
+
+    $tip.removeClass('fade top bottom left right in')
+
+    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
+    // this manually by checking the contents.
+    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
   }
 
-  const Event = {
-    HIDE       : `hide${EVENT_KEY}`,
-    HIDDEN     : `hidden${EVENT_KEY}`,
-    SHOW       : `show${EVENT_KEY}`,
-    SHOWN      : `shown${EVENT_KEY}`,
-    INSERTED   : `inserted${EVENT_KEY}`,
-    CLICK      : `click${EVENT_KEY}`,
-    FOCUSIN    : `focusin${EVENT_KEY}`,
-    FOCUSOUT   : `focusout${EVENT_KEY}`,
-    MOUSEENTER : `mouseenter${EVENT_KEY}`,
-    MOUSELEAVE : `mouseleave${EVENT_KEY}`
+  Popover.prototype.hasContent = function () {
+    return this.getTitle() || this.getContent()
   }
 
+  Popover.prototype.getContent = function () {
+    var $e = this.$element
+    var o  = this.options
 
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
+    return $e.attr('data-content')
+      || (typeof o.content == 'function' ?
+            o.content.call($e[0]) :
+            o.content)
+  }
 
-  class Popover extends Tooltip {
-
-
-    // getters
-
-    static get VERSION() {
-      return VERSION
-    }
-
-    static get Default() {
-      return Default
-    }
-
-    static get NAME() {
-      return NAME
-    }
-
-    static get DATA_KEY() {
-      return DATA_KEY
-    }
-
-    static get Event() {
-      return Event
-    }
-
-    static get EVENT_KEY() {
-      return EVENT_KEY
-    }
-
-    static get DefaultType() {
-      return DefaultType
-    }
-
-
-    // overrides
-
-    isWithContent() {
-      return this.getTitle() || this._getContent()
-    }
-
-    getTipElement() {
-      return (this.tip = this.tip || $(this.config.template)[0])
-    }
-
-    setContent() {
-      let tip          = this.getTipElement()
-      let title        = this.getTitle()
-      let content      = this._getContent()
-      let titleElement = $(tip).find(Selector.TITLE)[0]
-
-      if (titleElement) {
-        titleElement[
-          this.config.html ? 'innerHTML' : 'innerText'
-        ] = title
-      }
-
-      // we use append for html objects to maintain js events
-      $(tip).find(Selector.CONTENT).children().detach().end()[
-        this.config.html ?
-          (typeof content === 'string' ? 'html' : 'append') : 'text'
-      ](content)
-
-      $(tip)
-        .removeClass(ClassName.FADE)
-        .removeClass(ClassName.IN)
-
-      this.cleanupTether()
-    }
-
-    // private
-
-    _getContent() {
-      return this.element.getAttribute('data-content')
-        || (typeof this.config.content === 'function' ?
-              this.config.content.call(this.element) :
-              this.config.content)
-    }
-
-
-    // static
-
-    static _jQueryInterface(config) {
-      return this.each(function () {
-        let data   = $(this).data(DATA_KEY)
-        let _config = typeof config === 'object' ? config : null
-
-        if (!data && /destroy|hide/.test(config)) {
-          return
-        }
-
-        if (!data) {
-          data = new Popover(this, _config)
-          $(this).data(DATA_KEY, data)
-        }
-
-        if (typeof config === 'string') {
-          data[config]()
-        }
-      })
-    }
+  Popover.prototype.arrow = function () {
+    return (this.$arrow = this.$arrow || this.tip().find('.arrow'))
   }
 
 
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   */
+  // POPOVER PLUGIN DEFINITION
+  // =========================
 
-  $.fn[NAME]             = Popover._jQueryInterface
-  $.fn[NAME].Constructor = Popover
-  $.fn[NAME].noConflict  = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT
-    return Popover._jQueryInterface
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.popover')
+      var options = typeof option == 'object' && option
+
+      if (!data && /destroy|hide/.test(option)) return
+      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
   }
 
-  return Popover
+  var old = $.fn.popover
 
-})(jQuery)
+  $.fn.popover             = Plugin
+  $.fn.popover.Constructor = Popover
 
-export default Popover
+
+  // POPOVER NO CONFLICT
+  // ===================
+
+  $.fn.popover.noConflict = function () {
+    $.fn.popover = old
+    return this
+  }
+
+}(jQuery);

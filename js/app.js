@@ -25,16 +25,18 @@ app.run(function ($rootScope, localStorageService) {
 
 // Controller refreshes list every 10 seconds
 
-app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$timeout', 'localStorageService', 'amMoment', function ($scope, $rootScope, $routeParams, $http, $timeout, localStorageService, amMoment) {
+app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'amMoment', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, amMoment) {
 
-	var url;
+	var url, category;
 		
 	switch ($routeParams.category) {
 		case 'news':
 			url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
+			category = 'news';
 			break;
 		case 'sport':
 			url = 'http://ec2-54-170-206-69.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
+			category = 'sport';
 			break;
 		default:
 			url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
@@ -46,6 +48,14 @@ app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$t
 				$scope.links = data;
 			});
 	};
+
+	$rootScope.getNavClass = function(path) {
+		if (category === path) {
+			return 'active';	
+		} else {
+			return '';	
+		}	
+	}
 
 	// eg service twitterArticles
 	// twitterArticles.getData().then(()=>
