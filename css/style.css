@@ -8456,3 +8456,8 @@ body.dark .btn-default:hover,
 body.dark .btn-secondary:hover {
   color: linen;
 }
+
+body.dark .well {
+  background-color: #333;
+  border-color: #666;
+}
