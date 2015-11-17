@@ -8389,6 +8389,10 @@ button.close {
   color: white;
 }
 
+.links {
+  margin-bottom: 20px;
+}
+
 .links .row {
   padding: 0.5rem 0;
 }
@@ -8423,10 +8427,32 @@ body.dark a:hover {
   color: linen;
 }
 
-body.dark .tweets .row:nth-child(even) {
+body.dark .links .row:nth-child(even) {
   background: #333333;
 }
 
 body.dark .text-muted {
   color: #999;
+}
+
+body.dark .logo:hover .icon {
+  color: white;
+}
+
+body.dark .btn-default,
+body.dark .btn-secondary {
+  background: #666;
+  color: linen;
+  border-color: #999;
+}
+
+body.dark .btn-default.active,
+body.dark .btn-secondary.active {
+  background: #333;
+  color: linen;
+}
+
+body.dark .btn-default:hover,
+body.dark .btn-secondary:hover {
+  color: linen;
 }

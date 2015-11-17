@@ -60,6 +60,7 @@
 }
 
 .links {
+	margin-bottom: 20px;
 	.row {
 		padding: 0.5rem 0;
 		&:nth-child(even) {
@@ -96,10 +97,26 @@ body.dark {
 	a:hover {
 		color: linen;
 	}
-	.tweets .row:nth-child(even) {
+	.links .row:nth-child(even) {
 		background: #333333;
 	}
 	.text-muted {
 		color: #999;
+	}
+	.logo:hover .icon {
+		color: white;
+	}
+	.btn-default,
+	.btn-secondary {
+		background: #666;
+		color: linen;
+		border-color: #999;
+		&.active {
+			background: #333;
+			color: linen;
+		}
+		&:hover {
+			color: linen;
+		}
 	}
 }
