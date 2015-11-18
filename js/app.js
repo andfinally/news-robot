@@ -1,7 +1,5 @@
 'use strict';
 
-// http://testapi.metro.co.uk/twitter/articles.json?callback=ajaxfun
-
 var app = angular.module('newsRobotApp', ['ngRoute', 'LocalStorageModule', 'angularMoment']);
 
 app.config(['$routeProvider',
@@ -25,50 +23,41 @@ app.run(function ($rootScope, localStorageService) {
 
 // Controller refreshes list every 10 seconds
 
-app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'amMoment', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, amMoment) {
+app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'ApiService', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, ApiService) {
 
-	var url, category;
-		
+	var category;
+
 	switch ($routeParams.category) {
 		case 'news':
-			url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
 			category = 'news';
 			break;
 		case 'sport':
-			url = 'http://ec2-54-170-206-69.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
 			category = 'sport';
 			break;
-		default:
-			url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
 	}
-	
-	$scope.getData = function () {
-		$http.jsonp(url).
-			success(function (data, status) {
-				$scope.links = data;
-			});
-	};
 
-	$rootScope.getNavClass = function(path) {
+	$rootScope.getNavClass = function (path) {
 		if (category === path) {
-			return 'active';	
+			return 'active';
 		} else {
-			return '';	
-		}	
+			return '';
+		}
 	}
 
-	// eg service twitterArticles
-	// twitterArticles.getData().then(()=>
+	$scope.getData = function () {
+		ApiService.request().then(function (response) {
+			$scope.links = response.data;
+		});
+	}
 
 	// Function to replicate setInterval using $timeout service.
 	$scope.interval = function () {
 		$timeout(function () {
-			$scope.getData();
 			$scope.interval();
 		}, 10000)
 	};
 
-	$scope.toggleDark = function() {
+	$scope.toggleDark = function () {
 		$rootScope.dark = !$rootScope.dark;
 		if ($rootScope.dark) {
 			localStorageService.set('dark', true);
@@ -80,4 +69,23 @@ app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$l
 	// Get initial data and kick off the interval
 	$scope.getData();
 	$scope.interval();
+}]);
+
+app.factory('ApiService', ['$http', '$routeParams', function ($http, $routeParams) {
+	return {
+		request: function () {
+			var url = '';
+			switch ($routeParams.category) {
+				case 'news':
+					url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
+					break;
+				case 'sport':
+					url = 'http://ec2-54-170-206-69.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
+					break;
+				default:
+					url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
+			}
+			return $http.jsonp(url);
+		}
+	}
 }]);
