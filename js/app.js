@@ -15,34 +15,30 @@ app.config(['$routeProvider',
 	}
 ]);
 
-app.run(function ($rootScope, localStorageService) {
+app.run(function ($rootScope, $routeParams, localStorageService) {
 	if (localStorageService.get('dark') === true) {
 		$rootScope.dark = true;
+	}
+	$rootScope.toggleDark = function () {
+		$rootScope.dark = !$rootScope.dark;
+		if ($rootScope.dark) {
+			localStorageService.set('dark', true);
+		} else {
+			localStorageService.remove('dark');
+		}
+	}
+	$rootScope.getNavClass = function (path) {
+		if ($routeParams.category === path) {
+			return 'active';
+		} else {
+			return '';
+		}
 	}
 });
 
 // Controller refreshes list every 10 seconds
 
 app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'ApiService', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, ApiService) {
-
-	var category;
-
-	switch ($routeParams.category) {
-		case 'news':
-			category = 'news';
-			break;
-		case 'sport':
-			category = 'sport';
-			break;
-	}
-
-	$rootScope.getNavClass = function (path) {
-		if (category === path) {
-			return 'active';
-		} else {
-			return '';
-		}
-	}
 
 	$scope.getData = function () {
 		ApiService.request().then(function (response) {
@@ -56,15 +52,6 @@ app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$l
 			$scope.interval();
 		}, 10000)
 	};
-
-	$scope.toggleDark = function () {
-		$rootScope.dark = !$rootScope.dark;
-		if ($rootScope.dark) {
-			localStorageService.set('dark', true);
-		} else {
-			localStorageService.remove('dark');
-		}
-	}
 
 	// Get initial data and kick off the interval
 	$scope.getData();

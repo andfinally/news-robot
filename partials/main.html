@@ -1,6 +1,13 @@
 <div class="main">
-	<div class="well center-block">
-		<a class="btn btn-primary btn-lg" href="#/news" role="button">News</a>
-		<a class="btn btn-primary btn-lg" href="#/sport" role="button">Sport</a>
+	<div class="jumbotron">
+		<div class="intro">
+			<i class="icon icon-home pull-left"></i>
+			<h1>Attention!</h1>
+			<p>Select your category in the navbar</p>
+		</div>
 	</div>
+</div>
+
+<div class="btn-group btn-group-sm pull-right m-t" role="group">
+	<button type="button" ng-class="$root.dark ? 'active btn btn-secondary' : 'btn btn-secondary'" ng-click="toggleDark()" ng-cloak>Dark</button>
 </div>

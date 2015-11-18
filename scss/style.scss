@@ -2,61 +2,58 @@
 @import 'icons';
 
 .page-header {
-    margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 	border: none;
-    h1 {
-		margin: 0; 
-        font-family: 'Slackey', cursive;
-		font-size: 40px;
-        color: #0275d8;
-    }
+	h1 {
+		margin: 0;
+		font-family: 'Slackey', cursive;
+		font-size: 30px;
+		color: #0275d8;
+	}
 	.btn-group {
 		float: right;
 	}
 }
 
 .logo {
-  float: left;
-  width: 340px;
-  height: 50px;
-  margin-right: 5rem;
-  vertical-align: middle;
-  font-size: 2.5rem;
-  color: #0275d8;
-  .icon {
-	margin-right: 1rem; 
-	font-size: 40px;
-  }
-  &:hover,
-  &:active,
-  &:focus {
-	text-decoration: none; 
+	float: left;
+	width: 340px;
+	height: 50px;
+	margin-right: 5rem;
+	vertical-align: middle;
+	font-size: 2.5rem;
+	color: #0275d8;
 	.icon {
-		color: #0275d8;	
+		margin-right: 1rem;
+		font-size: 40px;
 	}
-  }
+	&:hover,
+	&:active,
+	&:focus {
+		text-decoration: none;
+		.icon {
+			color: #0275d8;
+		}
+	}
 }
 
 .main {
-	.well {
-		width: 600px;
-		margin: 100px auto;
-		text-align: center;
+	.jumbotron {
+		overflow: hidden;
+		padding-left: 20px;
+		padding-right: 20px;
+		h1 {
+			font-family: 'Slackey', cursive;
+			font-size: 40px;
+		}
+		.icon {
+			font-size: 100px;
+			margin-right: 20px;
+		}
 	}
 	.btn {
-		margin: 0 10px;	
+		margin: 0 10px;
 	}
-}
-
-.dark {
-  .logo {
-    color: white;
-  }
-  .page-header {
-    h1 {
-      color: white;
-    }
-  }
 }
 
 .links {
@@ -80,17 +77,7 @@
 	right: 40px;
 }
 
-@media (min-width: 768px) {
-	.date {
-		text-align: right;
-	}
-}
-
-@media (min-width: 992px) {
-
-}
-
-body.dark {
+.dark {
 	background: #060606;
 	color: #888;
 	a,
@@ -103,8 +90,14 @@ body.dark {
 	.text-muted {
 		color: #999;
 	}
-	.logo:hover .icon {
+	.logo,
+	.logo .icon {
 		color: white;
+	}
+	.page-header {
+		h1 {
+			color: white;
+		}
 	}
 	.btn-default,
 	.btn-secondary {
@@ -119,8 +112,32 @@ body.dark {
 			color: linen;
 		}
 	}
-	.well {
-		background-color: #333;
-		border-color: #666;
+}
+
+@media (min-width: 480px) {
+	.page-header {
+		h1 {
+			font-size: 40px;
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.main {
+		.jumbotron {
+			h1 {
+				font-size: 60px;
+			}
+			.icon {
+				font-size: 110px;
+			}
+		}
+		.intro {
+			width: 480px;
+			margin: 0 auto;
+		}
+	}
+	.date {
+		text-align: right;
 	}
 }
