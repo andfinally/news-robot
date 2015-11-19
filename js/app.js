@@ -38,8 +38,7 @@ app.run(function ($rootScope, $routeParams, localStorageService) {
 
 // Controller refreshes list every 10 seconds
 
-app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'ApiService', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, ApiService) {
-
+app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'ApiService', 'amMoment', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, ApiService, amMoment) {
 	$scope.getData = function () {
 		ApiService.request().then(function (response) {
 			$scope.links = response.data;
@@ -49,6 +48,7 @@ app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$l
 	// Function to replicate setInterval using $timeout service.
 	$scope.interval = function () {
 		$timeout(function () {
+			$scope.getData();
 			$scope.interval();
 		}, 10000)
 	};
