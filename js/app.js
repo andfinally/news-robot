@@ -69,6 +69,12 @@ app.factory('ApiService', ['$http', '$routeParams', function ($http, $routeParam
 				case 'sport':
 					url = 'http://ec2-54-170-206-69.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
 					break;
+				case 'entertainment':
+					url = 'http://ec2-54-155-30-98.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK'
+					break;
+				case 'lifestyle':
+					url = 'http://ec2-54-74-74-156.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
+					break;
 				default:
 					url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
 			}
