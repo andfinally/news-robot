@@ -1,4 +1,4 @@
-# twitter-service
+# News Robot
 
 * Install Node: `brew install node`
 * Check Node and npm: `node -v` `npm -v`
