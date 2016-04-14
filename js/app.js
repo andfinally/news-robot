@@ -64,7 +64,7 @@ app.factory('ApiService', ['$http', '$routeParams', function ($http, $routeParam
 			var url = '';
 			switch ($routeParams.category) {
 				case 'news':
-					url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
+					url = 'http://ec2-54-170-29-13.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
 					break;
 				case 'sport':
 					url = 'http://ec2-54-216-182-35.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
