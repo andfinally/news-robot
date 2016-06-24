@@ -9,6 +9,18 @@
 
 • `gulp watch`
 
+# Making updates
+
+* Go to AWS Elastic Beanstalk
+* metroDiscovery-env
+* Create zip file with 
+    * bower_components
+    * css
+    * fonts
+    * js
+    * partials
+    * favicon.ico, index.html, package.json and server.js
+
 # Screenshot
 
 ![Screenshot](screenshot.png?raw=true)
