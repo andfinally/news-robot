@@ -76,7 +76,7 @@ app.factory('ApiService', ['$http', '$routeParams', function ($http, $routeParam
 					url = 'http://ec2-54-216-230-28.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
 					break;
 				default:
-					url = 'http://api.metro.co.uk/twitter/articles.json?callback=JSON_CALLBACK';
+					url = '';
 			}
 			return $http.jsonp(url);
 		}
