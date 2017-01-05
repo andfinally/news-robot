@@ -3,23 +3,21 @@
 var app = angular.module('newsRobotApp', ['ngRoute', 'LocalStorageModule', 'angularMoment']);
 
 app.config(['$routeProvider',
-	function ($routeProvider) {
-		$routeProvider.
-			when('/', {
-				templateUrl: 'partials/main.html'
-			}).
-			when('/:category', {
-				templateUrl: 'partials/list.html',
-				controller : 'ListCtrl'
-			});
+	function($routeProvider) {
+		$routeProvider.when('/', {
+			templateUrl: 'partials/main.html'
+		}).when('/:category', {
+			templateUrl: 'partials/list.html',
+			controller : 'ListCtrl'
+		});
 	}
 ]);
 
-app.run(function ($rootScope, $routeParams, localStorageService) {
+app.run(function($rootScope, $routeParams, localStorageService) {
 	if (localStorageService.get('dark') === true) {
 		$rootScope.dark = true;
 	}
-	$rootScope.toggleDark = function () {
+	$rootScope.toggleDark = function() {
 		$rootScope.dark = !$rootScope.dark;
 		if ($rootScope.dark) {
 			localStorageService.set('dark', true);
@@ -27,7 +25,7 @@ app.run(function ($rootScope, $routeParams, localStorageService) {
 			localStorageService.remove('dark');
 		}
 	}
-	$rootScope.getNavClass = function (path) {
+	$rootScope.getNavClass = function(path) {
 		if ($routeParams.category === path) {
 			return 'active';
 		} else {
@@ -38,16 +36,19 @@ app.run(function ($rootScope, $routeParams, localStorageService) {
 
 // Controller refreshes list every 10 seconds
 
-app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'ApiService', 'amMoment', function ($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, ApiService, amMoment) {
-	$scope.getData = function () {
-		ApiService.request().then(function (response) {
-			$scope.links = response.data;
+app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$timeout', 'localStorageService', 'ApiService', 'amMoment', function($scope, $rootScope, $routeParams, $http, $location, $timeout, localStorageService, ApiService, amMoment) {
+	$scope.getData = function() {
+		ApiService.request().then(function(response) {
+			if (response) {
+				$scope.links = response.data;
+			}
 		});
 	}
 
 	// Function to replicate setInterval using $timeout service.
-	$scope.interval = function () {
-		$timeout(function () {
+	// TODO clear this interval on homepage and restart it on a list page
+	$scope.interval = function() {
+		$timeout(function() {
 			$scope.getData();
 			$scope.interval();
 		}, 10000)
@@ -58,9 +59,9 @@ app.controller('ListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$l
 	$scope.interval();
 }]);
 
-app.factory('ApiService', ['$http', '$routeParams', function ($http, $routeParams) {
+app.factory('ApiService', ['$http', '$routeParams', function($http, $routeParams) {
 	return {
-		request: function () {
+		request: function() {
 			var url = '';
 			switch ($routeParams.category) {
 				case 'news':
@@ -76,7 +77,9 @@ app.factory('ApiService', ['$http', '$routeParams', function ($http, $routeParam
 					url = 'http://ec2-54-216-230-28.eu-west-1.compute.amazonaws.com/twitter/articles.json?callback=JSON_CALLBACK';
 					break;
 				default:
-					url = '';
+					return {
+						then: function(){}
+					};
 			}
 			return $http.jsonp(url);
 		}
